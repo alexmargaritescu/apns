@@ -72,14 +72,14 @@ public class APNSConnection {
                 + java.nio.ByteBuffer.wrap(new byte[] { expiry[0], expiry[1], expiry[2], expiry[3] }).getInt());
         log.debug("Token: " + hexFormat(token));
         log.debug("payload: " + prettyFormat(payload));
-        service.addToken(hexFormat(token));
+        service.addToken(token);
         return write(frame, out);
     }
 
     private String hexFormat(byte[] data) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < data.length; i++) {
-            builder.append(String.format("%02X", data[i]));
+            builder.append(String.format("%02x", data[i]));
         }
         return builder.toString();
     }

@@ -24,14 +24,14 @@ public class FeedbackService extends AbstractService {
     void process(Socket socket) {
         try {
             DataOutputStream dataStream = new DataOutputStream(socket.getOutputStream());
-            Map<String, Date> inactiveDevices = getInactiveDevices();
+            Map<byte[], Date> inactiveDevices = getInactiveDevices();
             if (inactiveDevices.isEmpty()) {
                 dataStream.writeShort(0);
             }
-            for (Entry<String, Date> entry : inactiveDevices.entrySet()) {
+            for (Entry<byte[], Date> entry : inactiveDevices.entrySet()) {
                 int time = (int) (entry.getValue().getTime() / 1000L);
                 dataStream.writeInt(time);
-                byte[] bytes = entry.getKey().getBytes();
+                byte[] bytes = entry.getKey();
                 dataStream.writeShort(bytes.length);
                 dataStream.write(bytes);
             }
@@ -41,15 +41,15 @@ public class FeedbackService extends AbstractService {
         }
     }
 
-    private Map<String, Date> getInactiveDevices() {
-        Map<String, Date> inactiveDevices = new HashMap<>();
+    private Map<byte[], Date> getInactiveDevices() {
+        Map<byte[], Date> inactiveDevices = new HashMap<>();
         Date now = new Date();
         synchronized (devices) {
-            for (Iterator<String> iter = devices.keySet().iterator(); iter.hasNext();) {
-                String token = iter.next();
-                Date date = devices.get(token);
+            for (Iterator<Device> iter = devices.iterator(); iter.hasNext();) {
+                Device device = iter.next();
+                Date date = device.getDate();
                 if (now.getTime() - date.getTime() > 1000 * 60) {
-                    inactiveDevices.put(token, date);
+                    inactiveDevices.put(device.getToken(), date);
                     iter.remove();
                 }
             }

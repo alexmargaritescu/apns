@@ -1,7 +1,6 @@
 package ro.happyhyppo.apns;
 
 import java.net.Socket;
-import java.util.Date;
 
 public class APNService extends AbstractService {
 
@@ -14,9 +13,9 @@ public class APNService extends AbstractService {
         new APNSConnection(this, socket).process();
     }
 
-    void addToken(String token) {
+    void addToken(byte[] token) {
         synchronized (devices) {
-            devices.put(new String(token), new Date());
+            devices.add(new Device(token));
         }
     }
 

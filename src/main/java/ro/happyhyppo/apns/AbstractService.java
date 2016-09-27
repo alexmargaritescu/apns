@@ -4,9 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocketFactory;
@@ -24,7 +23,7 @@ public abstract class AbstractService implements Runnable {
 
     SSLServerSocketFactory socketFactory;
 
-    static Map<String, Date> devices = new HashMap<String, Date>();
+    static Set<Device> devices = new HashSet<>();
 
     public AbstractService(int portNumber) {
         this.portNumber = portNumber;
